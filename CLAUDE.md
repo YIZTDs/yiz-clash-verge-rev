@@ -11,6 +11,37 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Node**: pnpm@10.28.0 (required)
 - **Rust**: 1.91+ (required)
 
+## YIZ Enterprise Edition
+
+**⚠️ IMPORTANT: This repository uses YIZ Enterprise Edition. Always use YIZ-specific commands for development and building.**
+
+### Build Commands
+
+```bash
+# YIZ Enterprise Edition (DEFAULT - use these for all development)
+pnpm dev:yiz              # YIZ dev server
+pnpm build:yiz            # YIZ production build
+pnpm build:fast_yiz       # YIZ fast release build
+
+# OSS Edition (for comparison/testing only)
+pnpm dev                  # OSS dev server
+pnpm build                # OSS production build
+pnpm build:fast           # OSS fast release build
+```
+
+### Feature Flag
+
+- **Feature**: `yiz-edition`
+- **Cargo.toml**: Defined in `src-tauri/Cargo.toml`
+- **Usage**: Enables YIZ-specific defaults via conditional compilation
+
+### Configuration Directories
+
+| Edition        | Development                                                   | Production                                                |
+| -------------- | ------------------------------------------------------------- | --------------------------------------------------------- |
+| YIZ Enterprise | `%APPDATA%\io.github.clash-verge-rev.clash-verge-rev.yiz.dev` | `%APPDATA%\io.github.clash-verge-rev.clash-verge-rev.yiz` |
+| OSS            | `%APPDATA%\io.github.clash-verge-rev.clash-verge-rev.dev`     | `%APPDATA%\io.github.clash-verge-rev.clash-verge-rev`     |
+
 ## Development Quick Start
 
 ### Prerequisites
