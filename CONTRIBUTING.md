@@ -39,6 +39,7 @@ rustup set default-host x86_64-pc-windows-msvc
 Enable `corepack`:
 
 ```bash
+npm install -g corepack
 corepack enable
 ```
 
