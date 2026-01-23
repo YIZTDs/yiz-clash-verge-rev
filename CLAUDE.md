@@ -13,7 +13,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## YIZ Enterprise Edition
 
-**⚠️ IMPORTANT: This repository uses YIZ Enterprise Edition. Always use YIZ-specific commands for development and building.**
+**⚠️ IMPORTANT: This repository uses YIZ Enterprise Edition on the `dev-yiz` branch. Always work on this branch for YIZ development.**
+
+### Branch Structure
+
+- **`dev-yiz`** (PRIMARY WORKING BRANCH) - YIZ Enterprise Edition development
+  - All YIZ-specific code and features
+  - Base for YIZ builds and deployments
+- **`dev`** - OSS Open Source Edition (upstream compatibility)
+  - Maintained separately for upstream merges
+  - Reference branch only
 
 ### Build Commands
 
