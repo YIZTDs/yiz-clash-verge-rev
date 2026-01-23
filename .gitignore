@@ -21,3 +21,6 @@ target
 #/AGENTS.md
 # superpowers
 /.worktrees
+
+# Planning documents (temporary/personal)
+/docs/plans/
