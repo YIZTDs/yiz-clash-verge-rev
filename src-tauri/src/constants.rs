@@ -1,6 +1,9 @@
 use std::time::Duration;
 
 pub mod network {
+    #[cfg(feature = "yiz-edition")]
+    pub const DEFAULT_EXTERNAL_CONTROLLER: &str = "0.0.0.0:9067";
+    #[cfg(not(feature = "yiz-edition"))]
     pub const DEFAULT_EXTERNAL_CONTROLLER: &str = "127.0.0.1:9097";
 
     pub mod ports {
