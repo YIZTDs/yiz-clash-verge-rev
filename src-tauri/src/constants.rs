@@ -8,8 +8,19 @@ pub mod network {
         pub const DEFAULT_REDIR: u16 = 7895;
         #[cfg(target_os = "linux")]
         pub const DEFAULT_TPROXY: u16 = 7896;
+        #[cfg(feature = "yiz-edition")]
+        pub const DEFAULT_MIXED: u16 = 7867;
+        #[cfg(not(feature = "yiz-edition"))]
         pub const DEFAULT_MIXED: u16 = 7897;
+
+        #[cfg(feature = "yiz-edition")]
+        pub const DEFAULT_SOCKS: u16 = 7868;
+        #[cfg(not(feature = "yiz-edition"))]
         pub const DEFAULT_SOCKS: u16 = 7898;
+
+        #[cfg(feature = "yiz-edition")]
+        pub const DEFAULT_HTTP: u16 = 7869;
+        #[cfg(not(feature = "yiz-edition"))]
         pub const DEFAULT_HTTP: u16 = 7899;
 
         #[cfg(not(feature = "verge-dev"))]
