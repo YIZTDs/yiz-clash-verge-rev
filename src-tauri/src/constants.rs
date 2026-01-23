@@ -12,17 +12,17 @@ pub mod network {
         #[cfg(target_os = "linux")]
         pub const DEFAULT_TPROXY: u16 = 7896;
         #[cfg(feature = "yiz-edition")]
-        pub const DEFAULT_MIXED: u16 = 7867;
+        pub const DEFAULT_MIXED: u16 = 7887;
         #[cfg(not(feature = "yiz-edition"))]
         pub const DEFAULT_MIXED: u16 = 7897;
 
         #[cfg(feature = "yiz-edition")]
-        pub const DEFAULT_SOCKS: u16 = 7868;
+        pub const DEFAULT_SOCKS: u16 = 7888;
         #[cfg(not(feature = "yiz-edition"))]
         pub const DEFAULT_SOCKS: u16 = 7898;
 
         #[cfg(feature = "yiz-edition")]
-        pub const DEFAULT_HTTP: u16 = 7869;
+        pub const DEFAULT_HTTP: u16 = 7889;
         #[cfg(not(feature = "yiz-edition"))]
         pub const DEFAULT_HTTP: u16 = 7899;
 
