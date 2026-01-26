@@ -10,13 +10,13 @@ use tauri::Manager as _;
 
 // YIZ Edition + Dev Mode
 #[cfg(all(feature = "yiz-edition", feature = "verge-dev"))]
-pub static APP_ID: &str = "io.github.clash-verge-rev.clash-verge-rev.yiz.dev";
+pub static APP_ID: &str = "io.github.yiztds.yiz-clash-verge-rev.dev";
 #[cfg(all(feature = "yiz-edition", feature = "verge-dev"))]
 pub static BACKUP_DIR: &str = "clash-verge-rev-backup-yiz-dev";
 
 // YIZ Edition (Production)
 #[cfg(all(feature = "yiz-edition", not(feature = "verge-dev")))]
-pub static APP_ID: &str = "io.github.clash-verge-rev.clash-verge-rev.yiz";
+pub static APP_ID: &str = "io.github.yiztds.yiz-clash-verge-rev";
 #[cfg(all(feature = "yiz-edition", not(feature = "verge-dev")))]
 pub static BACKUP_DIR: &str = "clash-verge-rev-backup-yiz";
 

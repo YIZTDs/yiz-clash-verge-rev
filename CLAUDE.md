@@ -46,10 +46,10 @@ pnpm build:fast           # OSS fast release build
 
 ### Configuration Directories
 
-| Edition        | Development                                                   | Production                                                |
-| -------------- | ------------------------------------------------------------- | --------------------------------------------------------- |
-| YIZ Enterprise | `%APPDATA%\io.github.clash-verge-rev.clash-verge-rev.yiz.dev` | `%APPDATA%\io.github.clash-verge-rev.clash-verge-rev.yiz` |
-| OSS            | `%APPDATA%\io.github.clash-verge-rev.clash-verge-rev.dev`     | `%APPDATA%\io.github.clash-verge-rev.clash-verge-rev`     |
+| Edition        | Development                                               | Production                                            |
+| -------------- | --------------------------------------------------------- | ----------------------------------------------------- |
+| YIZ Enterprise | `%APPDATA%\io.github.yiztds.yiz-clash-verge-rev.dev`      | `%APPDATA%\io.github.yiztds.yiz-clash-verge-rev`      |
+| OSS            | `%APPDATA%\io.github.clash-verge-rev.clash-verge-rev.dev` | `%APPDATA%\io.github.clash-verge-rev.clash-verge-rev` |
 
 ## Development Quick Start
 
