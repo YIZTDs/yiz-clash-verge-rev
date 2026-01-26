@@ -8,6 +8,7 @@ on:
     # -rc tag 时预览发布, 跳过 telegram 通知、跳过 winget 提交、跳过 latest.json 文件更新
     tags:
       - "v*.*.*"
+      - "v*.*.*-*"
 permissions: write-all
 env:
   CARGO_INCREMENTAL: 0
@@ -545,4 +546,3 @@ jobs:
         run: pnpm updater-fixed-webview2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
