@@ -24,3 +24,6 @@ target
 
 # Planning documents (temporary/personal)
 /docs/plans/
+
+# Updater
+.env
