@@ -67,7 +67,7 @@ jobs:
   update_tag:
     name: Update tag
     runs-on: ubuntu-latest
-    needs: [release, release-for-linux-arm, release-for-fixed-webview2]
+    needs: [release, release-for-fixed-webview2]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -148,10 +148,6 @@ jobs:
             target: x86_64-pc-windows-msvc
           - os: windows-latest
             target: aarch64-pc-windows-msvc
-          - os: macos-latest
-            target: aarch64-apple-darwin
-          - os: macos-latest
-            target: x86_64-apple-darwin
           - os: ubuntu-22.04
             target: x86_64-unknown-linux-gnu
 
@@ -243,6 +239,7 @@ jobs:
 
   release-for-linux-arm:
     name: Release Build for Linux ARM
+    if: false
     needs: [check_tag_version]
     strategy:
       fail-fast: false
