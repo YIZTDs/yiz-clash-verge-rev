@@ -8,15 +8,29 @@ use std::iter;
 use std::{fs, path::PathBuf};
 use tauri::Manager as _;
 
-#[cfg(not(feature = "verge-dev"))]
-pub static APP_ID: &str = "io.github.clash-verge-rev.clash-verge-rev";
-#[cfg(not(feature = "verge-dev"))]
-pub static BACKUP_DIR: &str = "clash-verge-rev-backup";
+// YIZ Edition + Dev Mode
+#[cfg(all(feature = "yiz-edition", feature = "verge-dev"))]
+pub static APP_ID: &str = "io.github.clash-verge-rev.clash-verge-rev.yiz.dev";
+#[cfg(all(feature = "yiz-edition", feature = "verge-dev"))]
+pub static BACKUP_DIR: &str = "clash-verge-rev-backup-yiz-dev";
 
-#[cfg(feature = "verge-dev")]
+// YIZ Edition (Production)
+#[cfg(all(feature = "yiz-edition", not(feature = "verge-dev")))]
+pub static APP_ID: &str = "io.github.clash-verge-rev.clash-verge-rev.yiz";
+#[cfg(all(feature = "yiz-edition", not(feature = "verge-dev")))]
+pub static BACKUP_DIR: &str = "clash-verge-rev-backup-yiz";
+
+// OSS + Dev Mode
+#[cfg(all(not(feature = "yiz-edition"), feature = "verge-dev"))]
 pub static APP_ID: &str = "io.github.clash-verge-rev.clash-verge-rev.dev";
-#[cfg(feature = "verge-dev")]
+#[cfg(all(not(feature = "yiz-edition"), feature = "verge-dev"))]
 pub static BACKUP_DIR: &str = "clash-verge-rev-backup-dev";
+
+// OSS (Production)
+#[cfg(all(not(feature = "yiz-edition"), not(feature = "verge-dev")))]
+pub static APP_ID: &str = "io.github.clash-verge-rev.clash-verge-rev";
+#[cfg(all(not(feature = "yiz-edition"), not(feature = "verge-dev")))]
+pub static BACKUP_DIR: &str = "clash-verge-rev-backup";
 
 pub static PORTABLE_FLAG: OnceCell<bool> = OnceCell::new();
 

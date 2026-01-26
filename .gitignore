@@ -13,3 +13,17 @@ scripts/_env.sh
 .eslintcache
 .changelog_backups
 target
+
+# AI
+/.claude
+#/CLAUDE.md
+/.codex
+#/AGENTS.md
+# superpowers
+/.worktrees
+
+# Planning documents (temporary/personal)
+/docs/plans/
+
+# Updater
+.env

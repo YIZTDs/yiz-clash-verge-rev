@@ -1,0 +1,5 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "Clash Verge YIZ",
+  "identifier": "io.github.clash-verge-rev.clash-verge-rev.yiz"
+}

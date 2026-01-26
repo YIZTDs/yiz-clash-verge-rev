@@ -1,6 +1,9 @@
 use std::time::Duration;
 
 pub mod network {
+    #[cfg(feature = "yiz-edition")]
+    pub const DEFAULT_EXTERNAL_CONTROLLER: &str = "0.0.0.0:9067";
+    #[cfg(not(feature = "yiz-edition"))]
     pub const DEFAULT_EXTERNAL_CONTROLLER: &str = "127.0.0.1:9097";
 
     pub mod ports {
@@ -8,8 +11,19 @@ pub mod network {
         pub const DEFAULT_REDIR: u16 = 7895;
         #[cfg(target_os = "linux")]
         pub const DEFAULT_TPROXY: u16 = 7896;
+        #[cfg(feature = "yiz-edition")]
+        pub const DEFAULT_MIXED: u16 = 7887;
+        #[cfg(not(feature = "yiz-edition"))]
         pub const DEFAULT_MIXED: u16 = 7897;
+
+        #[cfg(feature = "yiz-edition")]
+        pub const DEFAULT_SOCKS: u16 = 7888;
+        #[cfg(not(feature = "yiz-edition"))]
         pub const DEFAULT_SOCKS: u16 = 7898;
+
+        #[cfg(feature = "yiz-edition")]
+        pub const DEFAULT_HTTP: u16 = 7889;
+        #[cfg(not(feature = "yiz-edition"))]
         pub const DEFAULT_HTTP: u16 = 7899;
 
         #[cfg(not(feature = "verge-dev"))]
