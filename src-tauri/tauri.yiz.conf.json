@@ -1,5 +1,12 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "Clash Verge YIZ",
-  "identifier": "io.github.yiztds.yiz-clash-verge-rev"
+  "identifier": "io.github.yiztds.yiz-clash-verge-rev",
+  "bundle": {
+    "windows": {
+      "nsis": {
+        "installerHooks": "./packages/windows/yiz-installer-hooks.nsh"
+      }
+    }
+  }
 }
