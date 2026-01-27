@@ -21,6 +21,7 @@ import {
   SvgIcon,
   ThemeProvider,
 } from "@mui/material";
+import { exit } from "@tauri-apps/plugin-process";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import type { CSSProperties } from "react";
@@ -32,16 +33,19 @@ import { SWRConfig } from "swr";
 import iconDark from "@/assets/image/icon_dark.svg?react";
 import iconLight from "@/assets/image/icon_light.svg?react";
 import LogoSvg from "@/assets/image/logo.svg?react";
-import { BaseErrorBoundary } from "@/components/base";
+import { BaseErrorBoundary, DialogRef } from "@/components/base";
 import { LayoutItem } from "@/components/layout/layout-item";
 import { LayoutTraffic } from "@/components/layout/layout-traffic";
 import { NoticeManager } from "@/components/layout/notice-manager";
 import { UpdateButton } from "@/components/layout/update-button";
 import { WindowControls } from "@/components/layout/window-controller";
+import { UpdateViewer } from "@/components/setting/mods/update-viewer";
 import { useI18n } from "@/hooks/use-i18n";
 import { useVerge } from "@/hooks/use-verge";
 import { useWindowDecorations } from "@/hooks/use-window";
+import { showNotice } from "@/services/notice-service";
 import { useThemeMode } from "@/services/states";
+import { checkUpdateSafe } from "@/services/update";
 import getSystem from "@/utils/get-system";
 
 import {
@@ -109,6 +113,9 @@ const SortableNavMenuItem = ({ item, label }: SortableNavMenuItemProps) => {
 dayjs.extend(relativeTime);
 
 const OS = getSystem();
+const isYizEdition =
+  import.meta.env.VITE_YIZ_EDITION === "1" ||
+  import.meta.env.VITE_YIZ_EDITION === "true";
 
 const Layout = () => {
   const mode = useThemeMode();
@@ -127,6 +134,8 @@ const Layout = () => {
     useState<MenuContextPosition | null>(null);
 
   const windowControlsRef = useRef<any>(null);
+  const startupUpdateRef = useRef<DialogRef>(null);
+  const startupUpdateCheckedRef = useRef(false);
   const { decorated } = useWindowDecorations();
 
   const sensors = useSensors(
@@ -236,6 +245,33 @@ const Layout = () => {
     }
   }, [language, switchLanguage]);
 
+  const handleStartupUpdateExit = useCallback(async () => {
+    await exit(0);
+  }, []);
+
+  useEffect(() => {
+    if (!themeReady || !isYizEdition) return;
+    if (startupUpdateCheckedRef.current) return;
+    startupUpdateCheckedRef.current = true;
+
+    const runStartupUpdateCheck = async () => {
+      try {
+        const updateInfo = await checkUpdateSafe();
+        if (!updateInfo) {
+          showNotice.success(
+            "settings.components.verge.advanced.notifications.latestVersion",
+          );
+          return;
+        }
+        startupUpdateRef.current?.open();
+      } catch (err) {
+        showNotice.error(err);
+      }
+    };
+
+    void runStartupUpdateCheck();
+  }, [themeReady]);
+
   if (!themeReady) {
     return (
       <div
@@ -282,6 +318,14 @@ const Layout = () => {
       <ThemeProvider theme={theme}>
         {/* 左侧底部窗口控制按钮 */}
         <NoticeManager position={verge?.notice_position} />
+        {isYizEdition && (
+          <UpdateViewer
+            ref={startupUpdateRef}
+            cancelLabel={t("settings.components.verge.advanced.fields.exit")}
+            onCancel={handleStartupUpdateExit}
+            onClose={handleStartupUpdateExit}
+          />
+        )}
         <div
           style={{
             animation: "fadeIn 0.5s",

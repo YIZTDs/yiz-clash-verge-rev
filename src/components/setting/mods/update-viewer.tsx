@@ -16,7 +16,21 @@ import { showNotice } from "@/services/notice-service";
 import { useSetUpdateState, useUpdateState } from "@/services/states";
 import { checkUpdateSafe as checkUpdate } from "@/services/update";
 
-export function UpdateViewer({ ref }: { ref?: Ref<DialogRef> }) {
+type UpdateViewerProps = {
+  ref?: Ref<DialogRef>;
+  cancelLabel?: string;
+  okLabel?: string;
+  onCancel?: () => void;
+  onClose?: () => void;
+};
+
+export function UpdateViewer({
+  ref,
+  cancelLabel,
+  okLabel,
+  onCancel,
+  onClose,
+}: UpdateViewerProps) {
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
@@ -137,10 +151,16 @@ export function UpdateViewer({ ref }: { ref?: Ref<DialogRef> }) {
         </Box>
       }
       contentSx={{ minWidth: 360, maxWidth: 400, height: "50vh" }}
-      okBtn={t("settings.modals.update.actions.update")}
-      cancelBtn={t("shared.actions.cancel")}
-      onClose={() => setOpen(false)}
-      onCancel={() => setOpen(false)}
+      okBtn={okLabel ?? t("settings.modals.update.actions.update")}
+      cancelBtn={cancelLabel ?? t("shared.actions.cancel")}
+      onClose={() => {
+        setOpen(false);
+        onClose?.();
+      }}
+      onCancel={() => {
+        setOpen(false);
+        onCancel?.();
+      }}
       onOk={onUpdate}
     >
       <Box sx={{ height: "calc(100% - 10px)", overflow: "auto" }}>

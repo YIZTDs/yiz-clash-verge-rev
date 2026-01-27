@@ -28,6 +28,9 @@ A Clash Meta GUI based on <a href="https://github.com/tauri-apps/tauri">Tauri</a
 
 ## YIZ Edition
 
+Note: YIZ Edition frontend gates use the compile-time flag `VITE_YIZ_EDITION`.
+`dev:yiz` / `build:yiz` and related scripts inject this flag automatically.
+
 ### YIZ Features
 
 - 默认开启 TUN 模式、系统代理模式、开机自启、外部控制器；
@@ -67,10 +70,6 @@ Supports Windows (x64/x86), Linux (x64/arm64) and macOS 10.15+ (intel/apple).
 
 Refer to [Doc FAQ Page](https://clash-verge-rev.github.io/faq/windows.html)
 
-### Donation
-
-[捐助Clash Verge Rev的开发](https://github.com/sponsors/clash-verge-rev)
-
 ## Development
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for more details.
@@ -82,10 +81,6 @@ pnpm i
 pnpm run prebuild
 pnpm dev
 ```
-
-## Contributions
-
-Issue and PR welcome!
 
 ## Acknowledgement
 
