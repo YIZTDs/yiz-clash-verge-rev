@@ -313,20 +313,6 @@ impl IVerge {
             needs_fix = true;
         }
 
-        // YIZ Edition: 检查并设置虚拟网卡模式
-        #[cfg(feature = "yiz-edition")]
-        {
-            if config.enable_tun_mode != Some(true) {
-                logging!(
-                    info,
-                    Type::Config,
-                    "YIZ Edition: 启动时发现虚拟网卡模式未启用，将强制设置为 true"
-                );
-                config.enable_tun_mode = Some(true);
-                needs_fix = true;
-            }
-        }
-
         // YIZ Edition: 检查并设置系统代理模式
         #[cfg(feature = "yiz-edition")]
         {
@@ -351,20 +337,6 @@ impl IVerge {
                     "YIZ Edition: 启动时发现开机自启未启用，将强制设置为 true"
                 );
                 config.enable_auto_launch = Some(true);
-                needs_fix = true;
-            }
-        }
-
-        // YIZ Edition: 检查并设置静默启动
-        #[cfg(feature = "yiz-edition")]
-        {
-            if config.enable_silent_start != Some(true) {
-                logging!(
-                    info,
-                    Type::Config,
-                    "YIZ Edition: 启动时发现静默启动未启用，将强制设置为 true"
-                );
-                config.enable_silent_start = Some(true);
                 needs_fix = true;
             }
         }
@@ -430,13 +402,6 @@ impl IVerge {
                         config.start_page = Some(String::from("/"));
                     }
 
-                    // YIZ Edition: 强制虚拟网卡模式为 true
-                    #[cfg(feature = "yiz-edition")]
-                    if config.enable_tun_mode != Some(true) {
-                        config.enable_tun_mode = Some(true);
-                        logging!(info, Type::Config, "YIZ Edition: 虚拟网卡模式已强制启用");
-                    }
-
                     // YIZ Edition: 强制系统代理模式为 true
                     #[cfg(feature = "yiz-edition")]
                     if config.enable_system_proxy != Some(true) {
@@ -449,13 +414,6 @@ impl IVerge {
                     if config.enable_auto_launch != Some(true) {
                         config.enable_auto_launch = Some(true);
                         logging!(info, Type::Config, "YIZ Edition: 开机自启已强制启用");
-                    }
-
-                    // YIZ Edition: 强制静默启动为 true
-                    #[cfg(feature = "yiz-edition")]
-                    if config.enable_silent_start != Some(true) {
-                        config.enable_silent_start = Some(true);
-                        logging!(info, Type::Config, "YIZ Edition: 静默启动已强制启用");
                     }
 
                     // YIZ Edition: 强制外部控制器为 true
@@ -502,17 +460,11 @@ impl IVerge {
             common_tray_icon: Some(false),
             sysproxy_tray_icon: Some(false),
             tun_tray_icon: Some(false),
-            #[cfg(feature = "yiz-edition")]
-            enable_tun_mode: Some(true),
-            #[cfg(not(feature = "yiz-edition"))]
             enable_tun_mode: Some(false),
             #[cfg(feature = "yiz-edition")]
             enable_auto_launch: Some(true),
             #[cfg(not(feature = "yiz-edition"))]
             enable_auto_launch: Some(false),
-            #[cfg(feature = "yiz-edition")]
-            enable_silent_start: Some(true),
-            #[cfg(not(feature = "yiz-edition"))]
             enable_silent_start: Some(false),
             enable_hover_jump_navigator: Some(true),
             hover_jump_navigator_delay: Some(280),
