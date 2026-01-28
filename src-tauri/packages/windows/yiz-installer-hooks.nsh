@@ -1,10 +1,10 @@
 !macro NSIS_HOOK_POSTINSTALL
-  ; Mark YIZ edition install and store metadata for external detection.
-  WriteRegStr SHCTX "Software\\YIZTDs\\ClashVergeYiz" "Edition" "YIZ"
-  WriteRegStr SHCTX "Software\\YIZTDs\\ClashVergeYiz" "InstallPath" "$INSTDIR"
-  WriteRegStr SHCTX "Software\\YIZTDs\\ClashVergeYiz" "Version" "${VERSION}"
+  ; Align with installer MANUPRODUCTKEY (stores InstallPath in default value).
+  WriteRegStr SHCTX "${MANUPRODUCTKEY}" "Edition" "YIZ"
+  WriteRegStr SHCTX "${MANUPRODUCTKEY}" "Version" "${VERSION}"
 !macroend
 
 !macro NSIS_HOOK_POSTUNINSTALL
-  DeleteRegKey SHCTX "Software\\YIZTDs\\ClashVergeYiz"
+  DeleteRegValue SHCTX "${MANUPRODUCTKEY}" "Edition"
+  DeleteRegValue SHCTX "${MANUPRODUCTKEY}" "Version"
 !macroend

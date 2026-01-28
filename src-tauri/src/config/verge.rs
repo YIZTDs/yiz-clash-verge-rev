@@ -320,7 +320,7 @@ impl IVerge {
                 logging!(
                     info,
                     Type::Config,
-                    "YIZ Edition: 启动时发现系统代理模式未启用，将强制设置为 true"
+                    "[YIZ] 启动时发现系统代理模式未启用，将强制设置为 true"
                 );
                 config.enable_system_proxy = Some(true);
                 needs_fix = true;
@@ -331,11 +331,7 @@ impl IVerge {
         #[cfg(feature = "yiz-edition")]
         {
             if config.enable_auto_launch != Some(true) {
-                logging!(
-                    info,
-                    Type::Config,
-                    "YIZ Edition: 启动时发现开机自启未启用，将强制设置为 true"
-                );
+                logging!(info, Type::Config, "[YIZ] 启动时发现开机自启未启用，将强制设置为 true");
                 config.enable_auto_launch = Some(true);
                 needs_fix = true;
             }
@@ -348,7 +344,7 @@ impl IVerge {
                 logging!(
                     info,
                     Type::Config,
-                    "YIZ Edition: 启动时发现外部控制器未启用，将强制设置为 true"
+                    "[YIZ] 启动时发现外部控制器未启用，将强制设置为 true"
                 );
                 config.enable_external_controller = Some(true);
                 needs_fix = true;
@@ -406,21 +402,21 @@ impl IVerge {
                     #[cfg(feature = "yiz-edition")]
                     if config.enable_system_proxy != Some(true) {
                         config.enable_system_proxy = Some(true);
-                        logging!(info, Type::Config, "YIZ Edition: 系统代理模式已强制启用");
+                        logging!(info, Type::Config, "[YIZ] 系统代理模式已强制启用");
                     }
 
                     // YIZ Edition: 强制开机自启为 true
                     #[cfg(feature = "yiz-edition")]
                     if config.enable_auto_launch != Some(true) {
                         config.enable_auto_launch = Some(true);
-                        logging!(info, Type::Config, "YIZ Edition: 开机自启已强制启用");
+                        logging!(info, Type::Config, "[YIZ] 开机自启已强制启用");
                     }
 
                     // YIZ Edition: 强制外部控制器为 true
                     #[cfg(feature = "yiz-edition")]
                     if config.enable_external_controller != Some(true) {
                         config.enable_external_controller = Some(true);
-                        logging!(info, Type::Config, "YIZ Edition: 外部控制器已强制启用");
+                        logging!(info, Type::Config, "[YIZ] 外部控制器已强制启用");
                     }
 
                     config

@@ -83,7 +83,12 @@ impl Config {
         // init Tun mode
         let handle = Handle::app_handle();
         let is_admin = is_current_app_handle_admin(handle);
+        #[cfg(not(feature = "yiz-edition"))]
         let is_service_available = service::is_service_available().await.is_ok();
+        #[cfg(feature = "yiz-edition")]
+        let mut is_service_available = service::is_service_available().await.is_ok();
+        #[cfg(feature = "yiz-edition")]
+        Self::yiz_init_tun_mode(is_admin, &mut is_service_available).await;
         if !is_admin && !is_service_available {
             let verge = Self::verge().await;
             verge.edit_draft(|d| {
@@ -111,6 +116,53 @@ impl Config {
         }
 
         Ok(())
+    }
+
+    #[cfg(feature = "yiz-edition")]
+    async fn yiz_init_tun_mode(is_admin: bool, is_service_available: &mut bool) {
+        if is_admin && !*is_service_available {
+            logging!(
+                info,
+                Type::Service,
+                "[YIZ] TUN service unavailable under admin, attempting reinstall"
+            );
+            let mut manager = service::SERVICE_MANAGER.lock().await;
+            if let Err(err) = manager
+                .handle_service_status(&service::ServiceStatus::ReinstallRequired)
+                .await
+            {
+                logging!(warn, Type::Service, "[YIZ] TUN service reinstall failed: {}", err);
+            } else {
+                *is_service_available = service::is_service_available().await.is_ok();
+                logging!(
+                    info,
+                    Type::Service,
+                    "[YIZ] TUN service reinstall finished (available: {})",
+                    *is_service_available
+                );
+            }
+        }
+
+        if *is_service_available {
+            let verge = Self::verge().await;
+            let tun_enabled = verge.latest_arc().enable_tun_mode.unwrap_or(false);
+            if !tun_enabled {
+                logging!(info, Type::Service, "[YIZ] TUN service available, enabling TUN mode");
+                verge.edit_draft(|d| {
+                    d.enable_tun_mode = Some(true);
+                });
+                verge.apply();
+                let _ = tray::Tray::global().update_menu().await;
+                let verge_data = Self::verge().await.latest_arc();
+                logging_error!(Type::Core, verge_data.save_file().await);
+            } else {
+                logging!(
+                    info,
+                    Type::Service,
+                    "[YIZ] TUN service available, TUN mode already enabled"
+                );
+            }
+        }
     }
 
     // Ensure "Merge" and "Script" profile items exist, adding them if missing.
@@ -152,9 +204,11 @@ impl Config {
         let target_name = default_profile.name;
         let target_name_lookup = target_name.clone();
         let target_url = default_profile.url;
+        let target_url_lookup = target_url.clone();
         let target_options = default_profile.option.unwrap_or_default();
 
         let profiles_dir = dirs::app_profiles_dir()?;
+        fs::create_dir_all(&profiles_dir).await?;
         fs::write(profiles_dir.join("Merge.yaml"), merge_template.as_bytes()).await?;
         fs::write(profiles_dir.join("Script.js"), script_template.as_bytes()).await?;
 
@@ -165,6 +219,7 @@ impl Config {
                 if let Some(items) = profiles.items.as_mut() {
                     for item in items.iter_mut() {
                         if item.name.as_deref() == Some(target_name_lookup.as_str()) {
+                            item.url = Some(target_url_lookup.clone().into());
                             let mut option = item.option.clone().unwrap_or_default();
                             if let Some(update_interval) = target_options.update_interval {
                                 option.update_interval = Some(update_interval);
