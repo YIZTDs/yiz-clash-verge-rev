@@ -45,6 +45,7 @@ A Clash Meta GUI based on <a href="https://github.com/tauri-apps/tauri">Tauri</a
   - `yiz/builtin/yiz_default_profile.yaml`
 - 使用 YIZ 版本特定的的签名密钥进行签名，参见: [yiz tauri 目录](./yiz/.tauri/)。
 - 更新订阅和应用依赖于：[YizUpdateServer](https://github.com/YIZTDs/YizUpdateServer)
+  - 编辑订阅链接：http://10.0.0.16:56080/admin
 - YIZ Edition frontend gates use the compile-time flag `VITE_YIZ_EDITION`. `dev:yiz` / `build:yiz` and related scripts inject this flag automatically.
 
 ## Install
