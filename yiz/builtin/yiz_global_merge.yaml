@@ -181,35 +181,39 @@ custom-proxy-groups:
     icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/fish.svg'
     proxies: ['♻️ 手动切换', '♻️ 自动选择', '🎯 全局直连']
     include-all: true
-  - name: '🚫 全局拦截'
-    type: 'select'
-    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/bug.svg'
-    proxies: ['REJECT', 'DIRECT']
-    include-all: true
   - name: '🎯 全局直连'
     type: 'select'
     icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/adjust.svg'
     proxies: ['DIRECT']
     include-all: true
+  - name: '🚫 全局拦截'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/bug.svg'
+    proxies: ['REJECT']
+    hidden: true
   - name: '⚙️ 延迟优先'
     type: url-test
     tolerance: 100
     icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/speed.svg'
     include-all: true
+    hidden: true
   - name: '⚙️ 故障转移'
     type: fallback
     icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/ambulance.svg'
     include-all: true
+    hidden: true
   - name: '⚙️ 负载均衡(散列)'
     type: load-balance
     strategy: consistent-hashing
     icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/merry_go.svg'
     include-all: true
+    hidden: true
   - name: '⚙️ 负载均衡(轮询)'
     type: load-balance
     strategy: round-robin
     icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/balance.svg'
     include-all: true
+    hidden: true
 custom-append-proxy-groups:
   - name: 'DCC Block'
     type: 'select'
@@ -219,9 +223,7 @@ custom-append-proxy-groups:
     lazy: true
     icon: ''
     proxies:
-      - '🚫 全局拦截'
-      - '♻️ 手动切换'
-      - '🎯 全局直连'
+      - 'REJECT'
     hidden: true
 custom-delete-proxy-groups: []
 
