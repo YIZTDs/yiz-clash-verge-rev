@@ -1,6 +1,7 @@
 import { GitHub, HelpOutlineRounded, Telegram } from "@mui/icons-material";
 import { Box, ButtonGroup, IconButton, Grid } from "@mui/material";
 import { useLockFn } from "ahooks";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import { BasePage } from "@/components/base";
@@ -10,7 +11,11 @@ import SettingVergeAdvanced from "@/components/setting/setting-verge-advanced";
 import SettingVergeBasic from "@/components/setting/setting-verge-basic";
 import { openWebUrl } from "@/services/cmds";
 import { showNotice } from "@/services/notice-service";
-import { useThemeMode } from "@/services/states";
+import { useAdminUI, useSetAdminUI, useThemeMode } from "@/services/states";
+
+const isYizEdition =
+  import.meta.env.VITE_YIZ_EDITION === "1" ||
+  import.meta.env.VITE_YIZ_EDITION === "true";
 
 const SettingPage = () => {
   const { t } = useTranslation();
@@ -33,6 +38,37 @@ const SettingPage = () => {
 
   const mode = useThemeMode();
   const isDark = mode === "light" ? false : true;
+  const setAdminUI = useSetAdminUI();
+  const isYizAdminUI = useAdminUI();
+
+  useEffect(() => {
+    if (!isYizEdition) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      const isEditable =
+        target?.tagName === "INPUT" ||
+        target?.tagName === "TEXTAREA" ||
+        target?.isContentEditable;
+      if (isEditable) return;
+
+      if (event.ctrlKey && event.shiftKey && event.code === "KeyY") {
+        event.preventDefault();
+        setAdminUI((prev) => {
+          const next = !prev;
+          showNotice.success(
+            next ? "Admin 模式已开启" : "Admin 模式已关闭",
+            2000,
+          );
+          return next;
+        });
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [setAdminUI]);
 
   return (
     <BasePage
@@ -78,14 +114,16 @@ const SettingPage = () => {
           >
             <SettingSystem onError={onError} />
           </Box>
-          <Box
-            sx={{
-              borderRadius: 2,
-              backgroundColor: isDark ? "#282a36" : "#ffffff",
-            }}
-          >
-            <SettingClash onError={onError} />
-          </Box>
+          {(!isYizEdition || isYizAdminUI) && (
+            <Box
+              sx={{
+                borderRadius: 2,
+                backgroundColor: isDark ? "#282a36" : "#ffffff",
+              }}
+            >
+              <SettingClash onError={onError} />
+            </Box>
+          )}
         </Grid>
         <Grid size={6}>
           <Box
@@ -97,14 +135,16 @@ const SettingPage = () => {
           >
             <SettingVergeBasic onError={onError} />
           </Box>
-          <Box
-            sx={{
-              borderRadius: 2,
-              backgroundColor: isDark ? "#282a36" : "#ffffff",
-            }}
-          >
-            <SettingVergeAdvanced onError={onError} />
-          </Box>
+          {(!isYizEdition || isYizAdminUI) && (
+            <Box
+              sx={{
+                borderRadius: 2,
+                backgroundColor: isDark ? "#282a36" : "#ffffff",
+              }}
+            >
+              <SettingVergeAdvanced onError={onError} />
+            </Box>
+          )}
         </Grid>
       </Grid>
     </BasePage>

@@ -21,6 +21,7 @@ import {
   getPreloadConfig,
 } from "./services/preload";
 import {
+  AdminUIProvider,
   LoadingCacheProvider,
   ThemeModeProvider,
   UpdateStateProvider,
@@ -51,6 +52,7 @@ const initializeApp = (initialThemeMode: "light" | "dark") => {
     <ThemeModeProvider key="theme" initialState={initialThemeMode} />,
     <LoadingCacheProvider key="loading" />,
     <UpdateStateProvider key="update" />,
+    <AdminUIProvider key="admin-ui" />,
   ];
 
   const root = createRoot(container);

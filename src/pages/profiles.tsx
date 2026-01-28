@@ -58,7 +58,11 @@ import {
   updateProfile,
 } from "@/services/cmds";
 import { showNotice } from "@/services/notice-service";
-import { useSetLoadingCache, useThemeMode } from "@/services/states";
+import {
+  useAdminUI,
+  useSetLoadingCache,
+  useThemeMode,
+} from "@/services/states";
 import { debugLog } from "@/utils/debug";
 
 // 记录profile切换状态
@@ -95,6 +99,10 @@ const isOperationAborted = (
   }
   return false;
 };
+
+const isYizEdition =
+  import.meta.env.VITE_YIZ_EDITION === "1" ||
+  import.meta.env.VITE_YIZ_EDITION === "true";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -178,6 +186,8 @@ const ProfilePage = () => {
     error,
     isStale,
   } = useProfiles();
+  const isYizAdminUI = useAdminUI();
+  const showYizGlobalExtUI = !isYizEdition || isYizAdminUI;
 
   useEffect(() => {
     const handleFileDrop = async () => {
@@ -1032,36 +1042,40 @@ const ProfilePage = () => {
               </SortableContext>
             </Grid>
           </Box>
-          <Divider
-            variant="middle"
-            flexItem
-            sx={{ width: `calc(100% - 32px)`, borderColor: dividercolor }}
-          ></Divider>
-          <Box sx={{ mt: 1.5, mb: "10px" }}>
-            <Grid container spacing={{ xs: 1, lg: 1 }}>
-              <Grid size={{ xs: 12, sm: 6, md: 6, lg: 6 }}>
-                <ProfileMore
-                  id="Merge"
-                  onSave={async (prev, curr) => {
-                    if (prev !== curr) {
-                      await onEnhance(false);
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6, md: 6, lg: 6 }}>
-                <ProfileMore
-                  id="Script"
-                  logInfo={chainLogs["Script"]}
-                  onSave={async (prev, curr) => {
-                    if (prev !== curr) {
-                      await onEnhance(false);
-                    }
-                  }}
-                />
-              </Grid>
-            </Grid>
-          </Box>
+          {showYizGlobalExtUI && (
+            <>
+              <Divider
+                variant="middle"
+                flexItem
+                sx={{ width: `calc(100% - 32px)`, borderColor: dividercolor }}
+              ></Divider>
+              <Box sx={{ mt: 1.5, mb: "10px" }}>
+                <Grid container spacing={{ xs: 1, lg: 1 }}>
+                  <Grid size={{ xs: 12, sm: 6, md: 6, lg: 6 }}>
+                    <ProfileMore
+                      id="Merge"
+                      onSave={async (prev, curr) => {
+                        if (prev !== curr) {
+                          await onEnhance(false);
+                        }
+                      }}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 6, md: 6, lg: 6 }}>
+                    <ProfileMore
+                      id="Script"
+                      logInfo={chainLogs["Script"]}
+                      onSave={async (prev, curr) => {
+                        if (prev !== curr) {
+                          await onEnhance(false);
+                        }
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
+            </>
+          )}
         </Box>
         <DragOverlay />
       </DndContext>

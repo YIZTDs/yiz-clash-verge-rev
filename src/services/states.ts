@@ -12,6 +12,10 @@ const [LoadingCacheProvider, useLoadingCache, useSetLoadingCache] =
 const [UpdateStateProvider, useUpdateState, useSetUpdateState] =
   createContextState<boolean>(false);
 
+// save admin ui unlock state (runtime only)
+const [AdminUIProvider, useAdminUI, useSetAdminUI] =
+  createContextState<boolean>(false);
+
 export {
   ThemeModeProvider,
   useThemeMode,
@@ -22,4 +26,7 @@ export {
   UpdateStateProvider,
   useUpdateState,
   useSetUpdateState,
+  AdminUIProvider,
+  useAdminUI,
+  useSetAdminUI,
 };
