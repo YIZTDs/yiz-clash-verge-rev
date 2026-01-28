@@ -1,0 +1,8 @@
+name: YIZ Clash Sub
+url: http://10.0.0.16:56080/v1/sub/clash
+option:
+  update_interval: 1440
+  danger_accept_invalid_certs: true
+  allow_auto_update: true
+  with_proxy: false
+  self_proxy: false

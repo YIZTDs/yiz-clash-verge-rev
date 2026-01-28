@@ -1,0 +1,540 @@
+# 全局扩展覆写配置
+# Profile Enhancement Merge Template for Clash Verge
+# docs : https://wiki.metacubex.one/
+
+mixed-port: 7887
+allow-lan: false
+ipv6: true
+mode: rule
+log-level: info
+unified-delay: true
+tun:
+  enable: true
+  stack: system
+  device: Mihomo
+  auto-detect-interface: true
+  auto-route: true
+  dns-hijack:
+    - any:53
+    - 'tcp://any:53'
+  mtu: 1500
+  strict-route: false
+dns:
+  enable: true
+  ipv6: true
+  listen: :53
+  prefer-h3: false
+  respect-rules: false
+  use-hosts: false
+  use-system-hosts: false
+  default-nameserver:
+    - 223.5.5.5
+    - 8.8.8.8
+    - 119.29.29.29
+    - 1.1.1.1
+    - 2400:3200::1
+    - 2001:4860:4860::8888
+    - system
+  nameserver:
+    - https://dns.alidns.com/dns-query
+    - 8.8.8.8
+    - https://doh.pub/dns-query
+    - https://1.1.1.1/dns-query
+    - https://1.0.0.1/dns-query
+    - https://208.67.222.222/dns-query
+    - https://208.67.220.220/dns-query
+    - https://194.242.2.2/dns-query
+    - https://194.242.2.3/dns-query
+    - system
+  proxy-server-nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    - 8.8.8.8
+    - https://1.1.1.1/dns-query
+    - https://1.0.0.1/dns-query
+    - https://208.67.222.222/dns-query
+    - https://208.67.220.220/dns-query
+    - https://194.242.2.2/dns-query
+    - https://194.242.2.3/dns-query
+    - tls://223.5.5.5
+    - system
+  direct-nameserver: []
+  direct-nameserver-follow-policy: false
+  enhanced-mode: fake-ip
+  fake-ip-filter-mode: blacklist
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    # Local
+    - '*.lan'
+    - '*.local'
+    - '*.arpa'
+    # NTP
+    - time.*.com
+    - ntp.*.com
+    - time.*.com
+    # Xiaomi
+    - +.market.xiaomi.com
+    # QQ
+    - localhost.ptlogin2.qq.com
+    - localhost.sec.qq.com
+    # Weixin
+    - localhost.work.weixin.qq.com
+    # Windows Network
+    - '*.msftncsi.com'
+    - www.msftconnecttest.com
+  fallback: []
+  fallback-filter:
+    domain:
+      - +.google.com
+      - +.facebook.com
+      - +.youtube.com
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
+      - 0.0.0.0/32
+profile:
+  store-selected: true
+
+custom-prepend-proxies:
+  - name: 'YIZ Clash'
+    type: 'socks5'
+    server: '10.0.0.20'
+    port: 7893
+    username: YIZ
+    password: yiz666666
+custom-append-proxies: []
+custom-delete-proxies: []
+
+custom-proxy-providers: []
+
+custom-prepend-proxy-groups: []
+
+enable-custom-proxy-groups: true
+custom-proxy-groups:
+  - name: '♻️ 手动切换'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/link.svg'
+    proxies: ['♻️ 自动选择', '🎯 全局直连']
+    include-all-proxies: true
+  - name: '♻️ 自动选择'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/link.svg'
+    proxies:
+      ['⚙️ 延迟优先', '⚙️ 故障转移', '⚙️ 负载均衡(散列)', '⚙️ 负载均衡(轮询)']
+  - name: '🤖 AI'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/chatgpt.svg'
+    proxies: ['♻️ 手动切换', '♻️ 自动选择', '🎯 全局直连']
+    include-all: true
+  - name: '🎰 Epic'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/epic.svg'
+    proxies: ['♻️ 手动切换', '♻️ 自动选择', '🎯 全局直连']
+    include-all: true
+  - name: '🕹️ Steam'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/steam.svg'
+    proxies: ['🎯 全局直连', '♻️ 手动切换', '♻️ 自动选择']
+    include-all: true
+  - name: '🎮 游戏平台'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/xbox.svg'
+    proxies: ['🎯 全局直连', '♻️ 手动切换', '♻️ 自动选择']
+    include-all: true
+  - name: '🎮 游戏下载(大陆)'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/xbox.svg'
+    proxies: ['🎯 全局直连', '♻️ 手动切换', '♻️ 自动选择']
+    include-all: true
+  - name: '🎮 游戏下载(海外)'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/xbox.svg'
+    proxies: ['♻️ 手动切换', '♻️ 自动选择', '🎯 全局直连']
+    include-all: true
+  - name: '🌐 谷歌服务'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/google.svg'
+    proxies: ['♻️ 手动切换', '♻️ 自动选择', '🎯 全局直连']
+  - name: '🍎 苹果服务'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/apple.svg'
+    proxies: ['♻️ 手动切换', '♻️ 自动选择', '🎯 全局直连']
+  - name: '🧩 微软服务'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/microsoft.svg'
+    proxies: ['♻️ 手动切换', '♻️ 自动选择', '🎯 全局直连']
+  - name: '🎬 流媒体'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/youtube.svg'
+    proxies: ['♻️ 手动切换', '♻️ 自动选择', '🎯 全局直连']
+  - name: '📲 社交平台'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/telegram.svg'
+    proxies: ['♻️ 手动切换', '♻️ 自动选择', '🎯 全局直连']
+  - name: '🐉 大陆直连'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/unknown.svg'
+    proxies: ['🎯 全局直连', '♻️ 手动切换', '♻️ 自动选择']
+  - name: '🐟 漏网之鱼'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/fish.svg'
+    proxies: ['♻️ 手动切换', '♻️ 自动选择', '🎯 全局直连']
+    include-all: true
+  - name: '🚫 全局拦截'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/bug.svg'
+    proxies: ['REJECT', 'DIRECT']
+    include-all: true
+  - name: '🎯 全局直连'
+    type: 'select'
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/adjust.svg'
+    proxies: ['DIRECT']
+    include-all: true
+  - name: '⚙️ 延迟优先'
+    type: url-test
+    tolerance: 100
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/speed.svg'
+    include-all: true
+  - name: '⚙️ 故障转移'
+    type: fallback
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/ambulance.svg'
+    include-all: true
+  - name: '⚙️ 负载均衡(散列)'
+    type: load-balance
+    strategy: consistent-hashing
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/merry_go.svg'
+    include-all: true
+  - name: '⚙️ 负载均衡(轮询)'
+    type: load-balance
+    strategy: round-robin
+    icon: 'https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/balance.svg'
+    include-all: true
+custom-append-proxy-groups:
+  - name: 'DCC Block'
+    type: 'select'
+    interval: 300
+    timeout: 5000
+    max-failed-times: 5
+    lazy: true
+    icon: ''
+    proxies:
+      - '🚫 全局拦截'
+      - '♻️ 手动切换'
+      - '🎯 全局直连'
+    hidden: true
+custom-delete-proxy-groups: []
+
+###### RULE PROVIDERS ######
+custom-rule-providers:
+  ###### Loyalsoldier 规则集 : https://github.com/Loyalsoldier/clash-rules ######
+  # 局域网 IP 及保留 IP 地址列表
+  Loyalsoldier-lancidr:
+    type: http
+    behavior: ipcidr
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/lancidr.txt
+    path: ./ruleset/lancidr.yaml
+    interval: 86400
+
+  # 私有网络专用域名列表
+  Loyalsoldier-private:
+    type: http
+    behavior: domain
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/private.txt
+    path: ./ruleset/private.yaml
+    interval: 86400
+
+  # 广告域名列表
+  Loyalsoldier-reject:
+    type: http
+    behavior: domain
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt
+    path: ./ruleset/reject.yaml
+    interval: 86400
+
+  # 代理域名列表
+  Loyalsoldier-proxy:
+    type: http
+    behavior: domain
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/proxy.txt
+    path: ./ruleset/proxy.yaml
+    interval: 86400
+
+  # GFWList 域名列表
+  Loyalsoldier-gfw:
+    type: http
+    behavior: domain
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/gfw.txt
+    path: ./ruleset/gfw.yaml
+    interval: 86400
+
+  # 非中国大陆使用的顶级域名列表
+  Loyalsoldier-tld-not-cn:
+    type: http
+    behavior: domain
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/tld-not-cn.txt
+    path: ./ruleset/tld-not-cn.yaml
+    interval: 86400
+
+  # Telegram 使用的 IP 地址列表
+  Loyalsoldier-telegramcidr:
+    type: http
+    behavior: ipcidr
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/telegramcidr.txt
+    path: ./ruleset/telegramcidr.yaml
+    interval: 86400
+
+  # iCloud 域名列表
+  Loyalsoldier-icloud:
+    type: http
+    behavior: domain
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/icloud.txt
+    path: ./ruleset/icloud.yaml
+    interval: 86400
+
+  # Apple 在中国大陆可直连的域名列表
+  Loyalsoldier-apple:
+    type: http
+    behavior: domain
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/apple.txt
+    path: ./ruleset/apple.yaml
+    interval: 86400
+
+  # [慎用]Google 在中国大陆可直连的域名列表
+  Loyalsoldier-google-cn:
+    type: http
+    behavior: domain
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/google.txt
+    path: ./ruleset/google.yaml
+    interval: 86400
+
+  # 中国大陆 IP 地址列表
+  Loyalsoldier-cncidr:
+    type: http
+    behavior: ipcidr
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/cncidr.txt
+    path: ./ruleset/cncidr.yaml
+    interval: 86400
+
+  # 大陆直连域名列表
+  Loyalsoldier-direct:
+    type: http
+    behavior: domain
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt
+    path: ./ruleset/direct.yaml
+    interval: 86400
+
+  # 需要大陆直连的常见软件列表
+  Loyalsoldier-direct-applications:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/applications.txt
+    path: ./ruleset/applications.yaml
+    interval: 86400
+
+  ###### blackmatrix7 规则集：https://github.com/blackmatrix7/ios_rule_script ######
+  blackmatrix7-openai:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/OpenAI/OpenAI.yaml
+    path: ./ruleset/blackmatrix7/openai.yaml
+    interval: 86400
+  blackmatrix7-gemini:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Gemini/Gemini.yaml
+    path: ./ruleset/blackmatrix7/gemini.yaml
+    interval: 86400
+  blackmatrix7-claude:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Claude/Claude.yaml
+    path: ./ruleset/blackmatrix7/claude.yaml
+    interval: 86400
+  blackmatrix7-epic:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Epic/Epic.yaml
+    path: ./ruleset/blackmatrix7/epic.yaml
+    interval: 86400
+  blackmatrix7-steam:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Steam/Steam.yaml
+    path: ./ruleset/blackmatrix7/steam.yaml
+    interval: 86400
+  blackmatrix7-game:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Game/Game.yaml
+    path: ./ruleset/blackmatrix7/game.yaml
+    interval: 86400
+  blackmatrix7-game-download:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Game/GameDownload/GameDownload.yaml
+    path: ./ruleset/blackmatrix7/gamedownload.yaml
+    interval: 86400
+  blackmatrix7-game-download-cn:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Game/GameDownloadCN/GameDownloadCN.yaml
+    path: ./ruleset/blackmatrix7/gamedownloadCN.yaml
+    interval: 86400
+  blackmatrix7-microsoft:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Microsoft/Microsoft.yaml
+    path: ./ruleset/blackmatrix7/microsoft.yaml
+    interval: 86400
+  blackmatrix7-google:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Google/Google.yaml
+    path: ./ruleset/blackmatrix7/google.yaml
+    interval: 86400
+  blackmatrix7-google-drive:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GoogleDrive/GoogleDrive.yaml
+    path: ./ruleset/blackmatrix7/googledrive.yaml
+    interval: 86400
+  blackmatrix7-google-earth:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GoogleEarth/GoogleEarth.yaml
+    path: ./ruleset/blackmatrix7/googleearth.yaml
+    interval: 86400
+  blackmatrix7-google-fcm:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GoogleFCM/GoogleFCM.yaml
+    path: ./ruleset/blackmatrix7/googlefcm.yaml
+    interval: 86400
+  blackmatrix7-google-search:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GoogleSearch/GoogleSearch.yaml
+    path: ./ruleset/blackmatrix7/googlesearch.yaml
+    interval: 86400
+  blackmatrix7-google-voice:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GoogleVoice/GoogleVoice.yaml
+    path: ./ruleset/blackmatrix7/googlevoice.yaml
+    interval: 86400
+  ###### Adobe is dumb 规则集：https://github.com/ignaciocastro/a-dove-is-dumb/ ######
+  adobeisdumb-clash:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/ignaciocastro/a-dove-is-dumb@main/clash.yaml
+    path: ./ruleset/adobeisdumb/adobeisdumb_clash.yaml
+    interval: 86400
+
+############ RULES & RULE SETS ############
+custom-prepend-rules:
+  # Epic & CG
+  # - 'DOMAIN-SUFFIX,mh-texture-synthesis-service.eeeb.live.use1a.on.epicgames.com,🎰 Epic'
+  # - 'DOMAIN-SUFFIX,mh-uemhc-autorig-service.eeeb.live.use1a.on.epicgames.com,🎰 Epic'
+  # - 'DOMAIN-SUFFIX,/s3.us-east-1.amazonaws.com,🎰 Epic'
+  - 'DOMAIN-SUFFIX,fastly-edge.com,🎰 Epic'
+  - 'DOMAIN-SUFFIX,epicgamescdn.com,🎰 Epic'
+  # 需要直连的网站(高优先级，防止被规则覆盖)
+  - 'DOMAIN-SUFFIX,iiicg.com,DIRECT'
+  ###### App Crack ######
+  # Adobe 禁出站
+  - 'RULE-SET,adobeisdumb-clash,DCC Block'
+  # - 'DOMAIN-SUFFIX,adobe.io,DCC Block'
+  # - 'DOMAIN-SUFFIX,adobestats.io,DCC Block'
+  # - 'DOMAIN-SUFFIX,hstatic.io,DCC Block'
+  - 'DOMAIN-SUFFIX,crs.cr.adobe.com,DCC Block'
+  - 'DOMAIN-SUFFIX,genuine.adobe.com,DCC Block'
+  - 'DOMAIN-SUFFIX,prod.adobegenuine.com,DCC Block'
+  - 'PROCESS-NAME,Adobe Substance 3D Painter.exe,DCC Block'
+  - 'PROCESS-NAME,Adobe Substance 3D Designer.exe,DCC Block'
+  - 'PROCESS-NAME,Adobe Premiere Pro.exe,DCC Block'
+  - 'PROCESS-NAME,Photoshop.exe,DCC Block'
+  - 'PROCESS-NAME,Adobe Media Encoder.exe,DCC Block'
+  - 'PROCESS-NAME,Adobe Bridge.exe,DCC Block'
+  - 'PROCESS-NAME,AfterFX.exe,DCC Block'
+  - 'PROCESS-NAME,AcroCEF.exe,DCC Block'
+  - 'PROCESS-NAME,Acrobat.exe,DCC Block'
+  - 'PROCESS-NAME,acrotray.exe,DCC Block' # Acrobat Licensing Service
+  - 'PROCESS-NAME,AGSService.exe,DCC Block' # Adobe Genuine Service (AGS)
+  - 'PROCESS-NAME,AdobeGenuineValidator.exe,DCC Block' # Adobe Genuine Service (AGS)
+  # Autodesk 禁出站
+  - 'DOMAIN-SUFFIX,genuine-software.autodesk.com,DCC Block'
+  - 'DOMAIN-SUFFIX,genuine-software1.autodesk.com,DCC Block'
+  - 'DOMAIN-SUFFIX,genuine-software2.autodesk.com,DCC Block'
+  - 'DOMAIN-SUFFIX,ase.autodesk.com,DCC Block'
+  - 'DOMAIN-SUFFIX,ase-cdn-stg.autodesk.com,DCC Block'
+  - 'PROCESS-NAME,maya.exe,DCC Block'
+  - 'PROCESS-NAME,AdskLicensingAgent.exe,DCC Block'
+  - 'PROCESS-NAME,AdskLicensingService.exe,DCC Block'
+  - 'PROCESS-NAME,AdskLicensingUpdateSupport.exe,DCC Block'
+  - 'PROCESS-NAME,AdskLicensingAnalyticsClient.exe,DCC Block'
+  - 'PROCESS-NAME,GenuineService.exe,DCC Block'
+  - 'PROCESS-NAME,FNPLicensingService.exe,DCC Block'
+  # The Foundary (Nuke) 禁出站
+  - 'PROCESS-NAME-REGEX,Nuke\.*exe,DCC Block'
+  - 'PROCESS-NAME,rlm.exe,DCC Block'
+  - 'PROCESS-NAME,rlm.foundry.exe,DCC Block'
+  - 'DOMAIN-SUFFIX,analytics-staging-uploadsigner-1918168136.eu-west-1.elb.amazonaws.com,DCC Block'
+  # SideFX (Houdini) 禁出站
+  - 'PROCESS-NAME,houdini.exe,DCC Block'
+  - 'PROCESS-NAME,houdini_launcher.exe,DCC Block'
+  - 'PROCESS-NAME,hserver.exe,DCC Block'
+  - 'PROCESS-NAME,sesictrl.exe,DCC Block'
+  - 'PROCESS-NAME,sesinetd.exe,DCC Block'
+  # V-Ray / Chaos 禁出站
+  - 'PROCESS-NAME,vrol.exe,DCC Block' # V-Ray Online License Server
+  - 'PROCESS-NAME,vrlsupervisor.exe.exe,DCC Block' # Chaos License Server Supervisor
+  - 'PROCESS-NAME,chaosplayer_qt5.exe,DCC Block'
+  # Other DCC 禁出站
+  - 'PROCESS-NAME,Resolve.exe,DCC Block' # Davinci
+  - 'PROCESS-NAME,SpeedTree_Modeler.exe,DCC Block' # Speedtree
+  - 'PROCESS-NAME,hasplms.exe,DCC Block' # HASP
+  - 'PROCESS-NAME,hasplmv.exe,DCC Block' # HASP
+  - 'DOMAIN-REGEX,license.*\.jangafx\.com,DCC Block' # Jangafx
+  #######################
+
+enable-custom-rules: true
+custom-rules:
+  # blackmatrix7 规则集
+  - RULE-SET,blackmatrix7-openai,🤖 AI
+  - RULE-SET,blackmatrix7-gemini,🤖 AI
+  - RULE-SET,blackmatrix7-claude,🤖 AI
+  - RULE-SET,blackmatrix7-epic,🎰 Epic
+  - RULE-SET,blackmatrix7-steam,🕹️ Steam
+  - RULE-SET,blackmatrix7-game,🎮 游戏平台
+  - RULE-SET,blackmatrix7-game-download-cn,🎮 游戏下载(大陆)
+  - RULE-SET,blackmatrix7-game-download,🎮 游戏下载(海外)
+  - RULE-SET,blackmatrix7-microsoft,🧩 微软服务
+  - RULE-SET,blackmatrix7-google,🌐 谷歌服务
+  - RULE-SET,blackmatrix7-google-drive,🌐 谷歌服务
+  - RULE-SET,blackmatrix7-google-earth,🌐 谷歌服务
+  - RULE-SET,blackmatrix7-google-fcm,🌐 谷歌服务
+  - RULE-SET,blackmatrix7-google-search,🌐 谷歌服务
+  - RULE-SET,blackmatrix7-google-voice,🌐 谷歌服务
+  # Loyalsoldier 规则集
+  - RULE-SET,Loyalsoldier-private,🎯 全局直连
+  - RULE-SET,Loyalsoldier-lancidr,🎯 全局直连,no-resolve
+  - RULE-SET,Loyalsoldier-reject,🚫 全局拦截
+  - RULE-SET,Loyalsoldier-icloud,🍎 苹果服务
+  - RULE-SET,Loyalsoldier-apple,🍎 苹果服务
+  - RULE-SET,Loyalsoldier-telegramcidr,📲 社交平台,no-resolve
+  - RULE-SET,Loyalsoldier-proxy,♻️ 手动切换
+  # - RULE-SET,Loyalsoldier-google-cn,♻️ 手动切换
+  - RULE-SET,Loyalsoldier-cncidr,🐉 大陆直连,no-resolve
+  - RULE-SET,Loyalsoldier-direct,🐉 大陆直连
+  - RULE-SET,Loyalsoldier-direct-applications,🐉 大陆直连
+  # 其它规则
+  - GEOIP,LAN,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,🐟 漏网之鱼
+custom-append-rules:
+  # 需要直连的网站
+  - 'DOMAIN-SUFFIX,rustdesk.com,DIRECT'
+  - 'PROCESS-NAME,rustdesk.exe,DIRECT'
+  - 'DOMAIN-SUFFIX,motzify.com,🐉 大陆直连'
+custom-delete-rules: []

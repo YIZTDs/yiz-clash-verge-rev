@@ -22,6 +22,15 @@ use tauri_plugin_clash_verge_sysinfo::is_current_app_handle_admin;
 use tokio::sync::OnceCell;
 use tokio::time::sleep;
 
+#[cfg(feature = "yiz-edition")]
+use crate::config::{PrfOption, profiles_save_file_safe};
+#[cfg(feature = "yiz-edition")]
+use serde::Deserialize;
+#[cfg(feature = "yiz-edition")]
+use serde_yaml_ng;
+#[cfg(feature = "yiz-edition")]
+use tokio::fs;
+
 pub struct Config {
     clash_config: Draft<IClashTemp>,
     verge_config: Draft<IVerge>,
@@ -63,6 +72,10 @@ impl Config {
     /// 初始化订阅
     pub async fn init_config() -> Result<()> {
         Self::ensure_default_profile_items().await?;
+        #[cfg(feature = "yiz-edition")]
+        if let Err(err) = Self::ensure_yiz_defaults().await {
+            logging!(warn, Type::Config, "YIZ defaults init failed: {}", err);
+        }
 
         let verge = Self::verge().await.latest_arc();
         clash_verge_i18n::sync_locale(verge.language.as_deref());
@@ -111,6 +124,101 @@ impl Config {
             let script_item = &mut PrfItem::from_script(Some("Script".into()))?;
             profiles_append_item_safe(script_item).await?;
         }
+        Ok(())
+    }
+
+    #[cfg(feature = "yiz-edition")]
+    async fn ensure_yiz_defaults() -> Result<()> {
+        #[derive(Debug, Clone, Default, Deserialize)]
+        struct YizDefaultProfileOption {
+            update_interval: Option<u64>,
+            danger_accept_invalid_certs: Option<bool>,
+            allow_auto_update: Option<bool>,
+            with_proxy: Option<bool>,
+            self_proxy: Option<bool>,
+        }
+
+        #[derive(Debug, Clone, Deserialize)]
+        struct YizDefaultProfile {
+            name: std::string::String,
+            url: std::string::String,
+            option: Option<YizDefaultProfileOption>,
+        }
+
+        let merge_template = include_str!("../../../yiz/builtin/yiz_global_merge.yaml");
+        let script_template = include_str!("../../../yiz/builtin/yiz_global_script.js");
+        let profile_template = include_str!("../../../yiz/builtin/yiz_default_profile.yaml");
+        let default_profile: YizDefaultProfile = serde_yaml_ng::from_str(profile_template)?;
+        let target_name = default_profile.name;
+        let target_name_lookup = target_name.clone();
+        let target_url = default_profile.url;
+        let target_options = default_profile.option.unwrap_or_default();
+
+        let profiles_dir = dirs::app_profiles_dir()?;
+        fs::write(profiles_dir.join("Merge.yaml"), merge_template.as_bytes()).await?;
+        fs::write(profiles_dir.join("Script.js"), script_template.as_bytes()).await?;
+
+        let profiles = Self::profiles().await;
+        let exists = profiles
+            .with_data_modify(|mut profiles| async move {
+                let mut found = false;
+                if let Some(items) = profiles.items.as_mut() {
+                    for item in items.iter_mut() {
+                        if item.name.as_deref() == Some(target_name_lookup.as_str()) {
+                            let mut option = item.option.clone().unwrap_or_default();
+                            if let Some(update_interval) = target_options.update_interval {
+                                option.update_interval = Some(update_interval);
+                            }
+                            if let Some(danger_accept_invalid_certs) = target_options.danger_accept_invalid_certs {
+                                option.danger_accept_invalid_certs = Some(danger_accept_invalid_certs);
+                            }
+                            if let Some(allow_auto_update) = target_options.allow_auto_update {
+                                option.allow_auto_update = Some(allow_auto_update);
+                            }
+                            if let Some(with_proxy) = target_options.with_proxy {
+                                option.with_proxy = Some(with_proxy);
+                            }
+                            if let Some(self_proxy) = target_options.self_proxy {
+                                option.self_proxy = Some(self_proxy);
+                            }
+                            item.option = Some(option);
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+
+                if found {
+                    profiles.save_file().await?;
+                }
+
+                Ok((profiles, found))
+            })
+            .await?;
+
+        if exists {
+            return Ok(());
+        }
+
+        let option = PrfOption {
+            update_interval: target_options.update_interval,
+            danger_accept_invalid_certs: target_options.danger_accept_invalid_certs,
+            allow_auto_update: target_options.allow_auto_update,
+            with_proxy: target_options.with_proxy,
+            self_proxy: target_options.self_proxy,
+            ..PrfOption::default()
+        };
+        let name = String::from(target_name);
+        match PrfItem::from_url(&target_url, Some(&name), None, Some(&option)).await {
+            Ok(mut item) => {
+                profiles_append_item_safe(&mut item).await?;
+                profiles_save_file_safe().await?;
+            }
+            Err(err) => {
+                logging!(warn, Type::Config, "YIZ default subscription init failed: {}", err);
+            }
+        }
+
         Ok(())
     }
 

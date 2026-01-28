@@ -38,19 +38,20 @@ Note: YIZ Edition frontend gates use the compile-time flag `VITE_YIZ_EDITION`.
 - 更新：使用内部的更新代理服务进行应用更新，应用使用 YIZ 的签名密钥进行签名；
 - 注册表：注册表条件 YIZ 相关变量；
 
+### YIZ 内置默认配置
+
+YIZ Edition 启动时会强制写入全局 Merge/Script 与默认订阅参数。
+要修改内置内容，请编辑以下文件：
+
+- `yiz/builtin/yiz_global_merge.yaml`
+- `yiz/builtin/yiz_global_script.js`
+- `yiz/builtin/yiz_default_profile.yaml`
+
 ## Install
 
 请到发布页面下载对应的安装包：[Release page](https://github.com/clash-verge-rev/clash-verge-rev/releases)<br>
 Go to the [Release page](https://github.com/clash-verge-rev/clash-verge-rev/releases) to download the corresponding installation package<br>
 Supports Windows (x64/x86), Linux (x64/arm64) and macOS 10.15+ (intel/apple).
-
-#### 我应当怎样选择发行版
-
-| 版本        | 特征                                     | 链接                                                                                   |
-| :---------- | :--------------------------------------- | :------------------------------------------------------------------------------------- |
-| Stable      | 正式版，高可靠性，适合日常使用。         | [Release](https://github.com/clash-verge-rev/clash-verge-rev/releases)                 |
-| Alpha(废弃) | 测试发布流程。                           | [Alpha](https://github.com/clash-verge-rev/clash-verge-rev/releases/tag/alpha)         |
-| AutoBuild   | 滚动更新版，适合测试反馈，可能存在缺陷。 | [AutoBuild](https://github.com/clash-verge-rev/clash-verge-rev/releases/tag/autobuild) |
 
 #### 安装说明和常见问题，请到 [文档页](https://clash-verge-rev.github.io/) 查看
 
