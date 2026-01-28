@@ -1,7 +1,7 @@
 <h1 align="center">
   <img src="./src-tauri/icons/icon.png" alt="Clash" width="128" />
   <br>
-  Continuation of <a href="https://github.com/zzzgydi/clash-verge">Clash Verge</a>
+  YIZ Edition of <a href="https://github.com/clash-verge-rev/clash-verge-rev/">Clash Verge Rev</a>
   <br>
 </h1>
 
@@ -28,24 +28,24 @@ A Clash Meta GUI based on <a href="https://github.com/tauri-apps/tauri">Tauri</a
 
 ## YIZ Edition
 
-Note: YIZ Edition frontend gates use the compile-time flag `VITE_YIZ_EDITION`.
-`dev:yiz` / `build:yiz` and related scripts inject this flag automatically.
-
 ### YIZ Features
 
-- 默认开启 TUN 模式、系统代理模式、开机自启、外部控制器；
-- UI：切换新的应用图标；更新UI风格并隐藏非必要的选项至开发者模式；
-- 更新：使用内部的更新代理服务进行应用更新，应用使用 YIZ 的签名密钥进行签名；
-- 注册表：注册表条件 YIZ 相关变量；
+- 默认开启选项：TUN 模式、系统代理模式、开机自启、外部控制器；
+- 订阅：包含内置的YIZ默认订阅；
+- 全局扩展：包含硬编码的全局扩展脚本和全局扩展覆写配置；
+- 更新：使用YIZ内部的[更新代理服务](https://github.com/YIZTDs/YizUpdateServer)进行应用更新检查以及默认订阅更新；
+- UI：切换新的应用图标；更新UI主题风格；隐藏非必要的选项至管理员模式(设置页面通过`Ctrl+Shift+Y`进入)；
+- 注册表：注册表添加 YIZ 相关变量，方便识别 YIZ 版本的 Clash Verge Rev；
 
-### YIZ 内置默认配置
+### YIZ Dev Tips
 
-YIZ Edition 启动时会强制写入全局 Merge/Script 与默认订阅参数。
-要修改内置内容，请编辑以下文件：
-
-- `yiz/builtin/yiz_global_merge.yaml`
-- `yiz/builtin/yiz_global_script.js`
-- `yiz/builtin/yiz_default_profile.yaml`
+- YIZ Edition 启动时会强制写入全局 Merge/Script 与默认订阅参数。 要修改内置内容，请编辑以下文件：
+  - `yiz/builtin/yiz_global_merge.yaml`
+  - `yiz/builtin/yiz_global_script.js`
+  - `yiz/builtin/yiz_default_profile.yaml`
+- 使用 YIZ 版本特定的的签名密钥进行签名，参见: [yiz tauri 目录](./yiz/.tauri/)。
+- 更新订阅和应用依赖于：[YizUpdateServer](https://github.com/YIZTDs/YizUpdateServer)
+- YIZ Edition frontend gates use the compile-time flag `VITE_YIZ_EDITION`. `dev:yiz` / `build:yiz` and related scripts inject this flag automatically.
 
 ## Install
 
