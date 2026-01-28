@@ -217,6 +217,7 @@ jobs:
         # 上游 5.24 修改了 latest.json 的生成逻辑，且依赖 tauri-plugin-update 2.10.0 暂未发布，故锁定在 0.5.23 版本
         uses: tauri-apps/tauri-action@v0.6.1
         env:
+          VITE_YIZ_EDITION: "1"
           NODE_OPTIONS: "--max_old_space_size=4096"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
@@ -448,6 +449,7 @@ jobs:
         id: build
         uses: tauri-apps/tauri-action@v0.6.1
         env:
+          VITE_YIZ_EDITION: "1"
           NODE_OPTIONS: "--max_old_space_size=4096"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
