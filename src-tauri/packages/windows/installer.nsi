@@ -72,6 +72,10 @@ Var UpdateMode
 Var NoShortcutMode
 Var WixMode
 Var OldMainBinaryName
+Var LegacyFound
+Var LegacyUninstallString
+Var LegacyKeyPath
+Var LegacyDisplayName
 Var VC_REDIST_URL
 Var VC_REDIST_EXE
 Var VC_RUNTIME_READY
@@ -168,7 +172,11 @@ VIAddVersionKey "ProductVersion" "${VERSION}"
   !insertmacro MULTIUSER_PAGE_INSTALLMODE
 !endif
 
-; 4. Custom page to ask user if he wants to reinstall/uninstall
+; 4. Legacy Clash Verge detection & forced uninstall page
+Var LegacyReinstallChoice
+Page custom PageLegacyReinstall PageLeaveLegacyReinstall
+
+; 5. Custom page to ask user if he wants to reinstall/uninstall
 ;    only if a previous installation was detected
 Var ReinstallPageCheck
 Page custom PageReinstall PageLeaveReinstall
@@ -461,6 +469,13 @@ FunctionEnd
   !include "{{this}}"
 {{/each}}
 
+LangString legacyClashDetected ${LANG_ENGLISH} "An existing installation of Clash Verge / Clash Verge Rev was found. You must uninstall it to continue."
+LangString legacyClashUninstall ${LANG_ENGLISH} "Uninstall Clash Verge and continue"
+LangString legacyExit ${LANG_ENGLISH} "Exit installer"
+LangString legacyClashDetected ${LANG_SIMPCHINESE} "检测到已安装 Clash Verge / Clash Verge Rev，必须先卸载才能继续安装。"
+LangString legacyClashUninstall ${LANG_SIMPCHINESE} "卸载 Clash Verge 后继续"
+LangString legacyExit ${LANG_SIMPCHINESE} "退出安装程序"
+
 Function .onInit
   ${GetOptions} $CMDLINE "/P" $PassiveMode
   ${IfNot} ${Errors}
@@ -615,6 +630,201 @@ FunctionEnd
     !endif
   ${EndIf}
 !macroend
+
+Function FindLegacyClashUninstallHKLM
+  StrCpy $R8 ""
+  StrCpy $R0 0
+  loop_find_legacy:
+    EnumRegKey $R1 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall" $R0
+    StrCmp $R1 "" done_find_legacy
+    IntOp $R0 $R0 + 1
+    ReadRegStr $R2 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$R1" "DisplayName"
+    ${StrCase} $R3 $R2 "L"
+    ${If} $R3 == "clash verge"
+    ${OrIf} $R3 == "clash verge rev"
+    ${OrIf} $R3 == "clashverge"
+    ${OrIf} $R3 == "clash-verge"
+      ReadRegStr $R4 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$R1" "UninstallString"
+      ${If} $R4 != ""
+        StrCpy $R8 $R4
+        Return
+      ${EndIf}
+    ${EndIf}
+    Goto loop_find_legacy
+  done_find_legacy:
+FunctionEnd
+
+Function FindLegacyClashUninstallHKCU
+  StrCpy $R8 ""
+  StrCpy $R0 0
+  loop_find_legacy_cu:
+    EnumRegKey $R1 HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall" $R0
+    StrCmp $R1 "" done_find_legacy_cu
+    IntOp $R0 $R0 + 1
+    ReadRegStr $R2 HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$R1" "DisplayName"
+    ${StrCase} $R3 $R2 "L"
+    ${If} $R3 == "clash verge"
+    ${OrIf} $R3 == "clash verge rev"
+    ${OrIf} $R3 == "clashverge"
+    ${OrIf} $R3 == "clash-verge"
+      ReadRegStr $R4 HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$R1" "UninstallString"
+      ${If} $R4 != ""
+        StrCpy $R8 $R4
+        Return
+      ${EndIf}
+    ${EndIf}
+    Goto loop_find_legacy_cu
+  done_find_legacy_cu:
+FunctionEnd
+Function FindLegacyClashUninstallAny
+  StrCpy $LegacyFound 0
+  StrCpy $LegacyUninstallString ""
+  StrCpy $LegacyKeyPath ""
+  StrCpy $LegacyDisplayName ""
+  StrCpy $R8 ""
+
+  ; HKCU
+  Call FindLegacyClashUninstallHKCU
+  ${If} $R8 != ""
+    StrCpy $LegacyFound 1
+    StrCpy $LegacyUninstallString $R8
+    StrCpy $LegacyKeyPath "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\$R1"
+    StrCpy $LegacyDisplayName $R2
+    Return
+  ${EndIf}
+
+  ; HKLM
+  Call FindLegacyClashUninstallHKLM
+  ${If} $R8 != ""
+    StrCpy $LegacyFound 1
+    StrCpy $LegacyUninstallString $R8
+    StrCpy $LegacyKeyPath "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\$R1"
+    StrCpy $LegacyDisplayName $R2
+    Return
+  ${EndIf}
+
+  StrCpy $LegacyFound 0
+  StrCpy $LegacyUninstallString ""
+  StrCpy $LegacyKeyPath ""
+  StrCpy $LegacyDisplayName ""
+FunctionEnd
+
+Function PageLegacyReinstall
+  ${If} $UpdateMode = 1
+    Abort
+  ${EndIf}
+
+  StrCpy $LegacyFound 0
+  StrCpy $LegacyUninstallString ""
+  StrCpy $LegacyReinstallChoice 1
+
+  Call FindLegacyClashUninstallAny
+
+  ${If} $LegacyFound = 0
+    ${If} ${RunningX64}
+      SetRegView 64
+    ${Else}
+      SetRegView 32
+    ${EndIf}
+    Abort
+  ${EndIf}
+
+  ${If} $PassiveMode = 1
+    Call PageLeaveLegacyReinstall
+  ${Else}
+    nsDialogs::Create 1018
+    Pop $R4
+    ${IfThen} $(^RTL) = 1 ${|} nsDialogs::SetRTL $(^RTL) ${|}
+
+    ${NSD_CreateLabel} 0 0 100% 36u "$(legacyClashDetected)"
+    Pop $R1
+
+    ${NSD_CreateRadioButton} 30u 55u -30u 8u "$(legacyClashUninstall)"
+    Pop $R2
+    ${NSD_OnClick} $R2 PageLegacyReinstallUpdateSelection
+
+    ${NSD_CreateRadioButton} 30u 75u -30u 8u "$(legacyExit)"
+    Pop $R3
+    ${NSD_OnClick} $R3 PageLegacyReinstallUpdateSelection
+
+    SendMessage $R2 ${BM_SETCHECK} ${BST_CHECKED} 0
+    StrCpy $LegacyReinstallChoice 1
+
+    ${NSD_SetFocus} $R2
+    nsDialogs::Show
+  ${EndIf}
+
+  ; Restore default registry view
+  ${If} ${RunningX64}
+    SetRegView 64
+  ${Else}
+    SetRegView 32
+  ${EndIf}
+FunctionEnd
+Function PageLegacyReinstallUpdateSelection
+  ${NSD_GetState} $R2 $R1
+  ${If} $R1 == ${BST_CHECKED}
+    StrCpy $LegacyReinstallChoice 1
+  ${Else}
+    StrCpy $LegacyReinstallChoice 2
+  ${EndIf}
+FunctionEnd
+Function PageLeaveLegacyReinstall
+  ${If} $LegacyFound = 0
+    Return
+  ${EndIf}
+
+  ${If} $LegacyReinstallChoice = 2
+    Quit
+  ${EndIf}
+
+  ; Uninstall all detected legacy entries in this run
+  uninstall_loop:
+    Call FindLegacyClashUninstallAny
+    ${If} $LegacyFound = 0
+      Goto uninstall_done
+    ${EndIf}
+
+    HideWindow
+    ClearErrors
+    !insertmacro CheckAllVergeProcesses
+
+    DetailPrint "Uninstalling legacy Clash Verge..."
+    ${If} $LegacyUninstallString == ""
+      MessageBox MB_ICONEXCLAMATION "Uninstall entry found but has no UninstallString. Please uninstall Clash Verge manually, then rerun the installer."
+      Goto cancel_legacy
+    ${EndIf}
+    StrCpy $R1 $LegacyUninstallString
+    ${IfThen} $UpdateMode = 1 ${|} StrCpy $R1 "$R1 /UPDATE" ${|}
+    ${IfThen} $PassiveMode = 1 ${|} StrCpy $R1 "$R1 /P" ${|}
+    StrCpy $R1 "$R1 /S"
+    ExecWait '$R1' $0
+    BringToFront
+    ${If} ${Errors}
+      StrCpy $0 2
+    ${EndIf}
+    ${If} $0 <> 0
+      MessageBox MB_ICONEXCLAMATION "Failed to uninstall Clash Verge (code: $0)."
+      Goto cancel_legacy
+    ${EndIf}
+
+    Goto uninstall_done
+
+  cancel_legacy:
+    ${If} ${RunningX64}
+      SetRegView 64
+    ${Else}
+      SetRegView 32
+    ${EndIf}
+    Quit
+
+  uninstall_done:
+  ${If} ${RunningX64}
+    SetRegView 64
+  ${Else}
+    SetRegView 32
+  ${EndIf}
+FunctionEnd
 
 !macro StartVergeService
   ; Check if the service exists
@@ -902,6 +1112,8 @@ Section Install
   DetailPrint "Removing window-state.json / .window-state.json"
   Delete "$APPDATA\io.github.yiztds.yiz-gateway\window-state.json"
   Delete "$APPDATA\io.github.yiztds.yiz-gateway\.window-state.json"
+  Delete "$APPDATA\\YIZ Package\\window-state.json"
+  Delete "$APPDATA\\YIZ Package\\.window-state.json"
 
   ; Clean legacy auto-launch registry entries
   StrCpy $R1 "Software\Microsoft\Windows\CurrentVersion\Run"
@@ -923,10 +1135,20 @@ Section Install
   ${If} $R2 != ""
     DeleteRegValue HKLM "$R1" "clash-verge"
   ${EndIf}
+  ReadRegStr $R2 HKCU "$R1" "YIZ Package"
+  ${If} $R2 != ""
+    DeleteRegValue HKCU "$R1" "YIZ Package"
+  ${EndIf}
+  ReadRegStr $R2 HKLM "$R1" "YIZ Package"
+  ${If} $R2 != ""
+    DeleteRegValue HKLM "$R1" "YIZ Package"
+  ${EndIf}
 
   ; Remove legacy executables
   IfFileExists "$INSTDIR\Clash Verge.exe" 0 +2
     Delete "$INSTDIR\Clash Verge.exe"
+  IfFileExists "$INSTDIR\YIZ Package.exe" 0 +2
+    Delete "$INSTDIR\YIZ Package.exe"
 
   !insertmacro SetContext
 
@@ -1097,10 +1319,20 @@ Section Uninstall
   ${If} $R2 != ""
     DeleteRegValue HKLM "$R1" "clash-verge"
   ${EndIf}
+  ReadRegStr $R2 HKCU "$R1" "YIZ Package"
+  ${If} $R2 != ""
+    DeleteRegValue HKCU "$R1" "YIZ Package"
+  ${EndIf}
+  ReadRegStr $R2 HKLM "$R1" "YIZ Package"
+  ${If} $R2 != ""
+    DeleteRegValue HKLM "$R1" "YIZ Package"
+  ${EndIf}
 
   ; Remove legacy executables
   IfFileExists "$INSTDIR\Clash Verge.exe" 0 +2
     Delete "$INSTDIR\Clash Verge.exe"
+  IfFileExists "$INSTDIR\YIZ Package.exe" 0 +2
+    Delete "$INSTDIR\YIZ Package.exe"
 
   !insertmacro SetContext
 
@@ -1173,6 +1405,7 @@ Section Uninstall
     ; Remove legacy public desktop shortcuts
     Delete "C:\Users\Public\Desktop\Clash Verge.lnk"
     Delete "C:\Users\Public\Desktop\clash-verge.lnk"
+    Delete "C:\Users\Public\Desktop\YIZ Package.lnk"
 
     ; Remove legacy shortcuts from all user desktops
     DetailPrint "Removing ${PRODUCTNAME} shortcuts from all user desktops..."
@@ -1188,6 +1421,7 @@ Section Uninstall
         StrCpy $R4 "$R3\Desktop"
         Delete "$R4\Clash Verge.lnk"
         Delete "$R4\clash-verge.lnk"
+        Delete "$R4\YIZ Package.lnk"
       ${EndIf}
       IntOp $R1 $R1 + 1
       Goto LegacyUserLoop
@@ -1198,20 +1432,26 @@ Section Uninstall
     SetShellVarContext current
     RMDir /r /REBOOTOK "$SMPROGRAMS\Clash Verge"
     RMDir /r /REBOOTOK "$SMPROGRAMS\clash-verge"
+    RMDir /r /REBOOTOK "$SMPROGRAMS\YIZ Package"
     !insertmacro SetContext
     RMDir /r /REBOOTOK "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Clash Verge"
     RMDir /r /REBOOTOK "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\clash-verge"
+    RMDir /r /REBOOTOK "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\YIZ Package"
 
     ; Clean legacy registry keys
     SetRegView 64
     DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\Clash Verge.exe"
     DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\clash-verge.exe"
+    DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\YIZ Package.exe"
     DeleteRegKey HKLM "Software\Clash Verge Rev"
     DeleteRegKey HKLM "Software\Clash Verge"
+    DeleteRegKey HKLM "Software\\YIZ Package"
     DeleteRegKey HKCU "Software\Clash Verge Rev"
     DeleteRegKey HKCU "Software\Clash Verge"
+    DeleteRegKey HKCU "Software\\YIZ Package"
     DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\ClashVerge"
     DeleteRegKey HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Clash Verge"
+    DeleteRegKey HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\YIZ Package"
 
     StrCpy $R1 0
     LegacyUninstallLoop:
@@ -1223,6 +1463,7 @@ Section Uninstall
       ${If} $R3 != ""
         StrCmp $R3 "Clash Verge" 0 +3
         StrCmp $R3 "clash-verge" 0 +2
+        StrCmp $R3 "YIZ Package" 0 +1
         DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$R2"
       ${EndIf}
       IntOp $R1 $R1 + 1
