@@ -12,7 +12,7 @@
       "icons/icon.ico"
     ],
     "resources": ["resources"],
-    "publisher": "YIZTDs",
+    "publisher": "Clash Verge Rev",
     "externalBin": ["sidecar/verge-mihomo", "sidecar/verge-mihomo-alpha"],
     "copyright": "GNU General Public License v3.0",
     "category": "DeveloperTool",
@@ -30,11 +30,12 @@
   "identifier": "io.github.clash-verge-rev.clash-verge-rev",
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDUzNDYzNDQ3QkQyRUM0NDgKUldSSXhDNjlSelJHVS82YkxSeHN6dit2TW5rN1RWeXNNbXRsT0FTaFdMdWN2YlVHYXVqQ3ZHQmUK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQyOEMyRjBCQkVGOUJEREYKUldUZnZmbStDeStNMHU5Mmo1N24xQXZwSVRYbXA2NUpzZE5oVzlqeS9Bc0t6RVV4MmtwVjBZaHgK",
       "endpoints": [
-        "http://10.0.0.16:56080/v1/update/yiz-clash-verge-rev/stable/default"
+        "https://download.clashverge.dev/https://github.com/clash-verge-rev/clash-verge-rev/releases/download/updater/update-proxy.json",
+        "https://gh-proxy.com/https://github.com/clash-verge-rev/clash-verge-rev/releases/download/updater/update-proxy.json",
+        "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/updater/update.json"
       ],
-      "dangerousInsecureTransportProtocol": true,
       "windows": {
         "installMode": "basicUi"
       }

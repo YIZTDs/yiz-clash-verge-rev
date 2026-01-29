@@ -130,7 +130,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.TAG_NAME }}
-          name: "Clash Verge YIZ ${{ env.TAG_NAME }}"
+          name: "YIZ Gateway ${{ env.TAG_NAME }}"
           body_path: release.txt
           draft: false
           prerelease: ${{ contains(github.ref_name, '-rc') }}
@@ -230,7 +230,7 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         with:
           tagName: ${{ github.ref_name }}
-          releaseName: "Clash Verge YIZ ${{ github.ref_name }}"
+          releaseName: "YIZ Gateway ${{ github.ref_name }}"
           releaseBody: "Draft release, will be updated later."
           releaseDraft: true
           prerelease: ${{ contains(github.ref_name, '-rc') }}
@@ -370,7 +370,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{env.VERSION}}
-          name: "Clash Verge YIZ v${{env.VERSION}}"
+          name: "YIZ Gateway v${{env.VERSION}}"
           body: "See release notes for detailed changelog."
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: ${{ contains(github.ref_name, '-rc') }}
@@ -482,7 +482,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{steps.build.outputs.appVersion}}
-          name: "Clash Verge YIZ v${{steps.build.outputs.appVersion}}"
+          name: "YIZ Gateway v${{steps.build.outputs.appVersion}}"
           body: "See release notes for detailed changelog."
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: ${{ contains(github.ref_name, '-rc') }}

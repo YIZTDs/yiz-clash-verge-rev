@@ -126,7 +126,7 @@
   "components": {
     "verge": {
       "basic": {
-        "title": "Verge Basic Setting",
+        "title": "YIZ Gateway Basic Setting",
         "actions": {
           "browse": "Browse"
         },
@@ -149,7 +149,7 @@
         }
       },
       "advanced": {
-        "title": "Verge Advanced Setting",
+        "title": "YIZ Gateway Advanced Setting",
         "tooltips": {
           "backupInfo": "Support local or WebDAV backup of configuration files",
           "openConfDir": "If the software runs abnormally, BACKUP and delete all files in this folder then restart the software",
@@ -173,7 +173,7 @@
           "liteModeSettings": "LightWeight Mode Settings",
           "exit": "Exit",
           "exportDiagnostics": "Export Diagnostic Info",
-          "vergeVersion": "Verge Version"
+          "vergeVersion": "YIZ Gateway Version"
         }
       },
       "theme": {

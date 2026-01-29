@@ -20,13 +20,13 @@ notifications:
     body: Profile Reactivated.
   appQuit:
     title: About to Exit
-    body: Clash Verge is about to exit.
+    body: YIZ Gateway is about to exit.
   appHidden:
     title: Application Hidden
-    body: Clash Verge is running in the background.
+    body: YIZ Gateway is running in the background.
 service:
-  adminInstallPrompt: Installing the Clash Verge service requires administrator privileges.
-  adminUninstallPrompt: Uninstalling the Clash Verge service requires administrator privileges.
+  adminInstallPrompt: Installing the YIZ Gateway service requires administrator privileges.
+  adminUninstallPrompt: Uninstalling the YIZ Gateway service requires administrator privileges.
 tray:
   dashboard: Dashboard
   ruleMode: Rule Mode
@@ -51,7 +51,7 @@ tray:
   coreLog: Core Log
   restartClash: Restart Clash Core
   restartApp: Restart Application
-  vergeVersion: Verge Version
+  vergeVersion: YIZ Gateway Version
   more: More
   exit: Exit
   tooltip:

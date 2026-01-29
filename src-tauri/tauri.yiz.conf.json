@@ -1,11 +1,32 @@
 {
+  "version": "2.4.5-yiz.2",
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "Clash Verge YIZ",
-  "identifier": "io.github.yiztds.yiz-clash-verge-rev",
+  "productName": "YIZ Gateway",
+  "identifier": "io.github.yiztds.yiz-gateway",
   "bundle": {
+    "publisher": "YIZTDs",
+    "longDescription": "YIZ Gateway",
+    "shortDescription": "YIZ Gateway",
     "windows": {
       "nsis": {
         "installerHooks": "./packages/windows/yiz-installer-hooks.nsh"
+      }
+    }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDUzNDYzNDQ3QkQyRUM0NDgKUldSSXhDNjlSelJHVS82YkxSeHN6dit2TW5rN1RWeXNNbXRsT0FTaFdMdWN2YlVHYXVqQ3ZHQmUK",
+      "endpoints": [
+        "http://10.0.0.16:56080/v1/update/yiz-clash-verge-rev/stable/default"
+      ],
+      "dangerousInsecureTransportProtocol": true,
+      "windows": {
+        "installMode": "basicUi"
+      }
+    },
+    "deep-link": {
+      "desktop": {
+        "schemes": ["yiz", "yiz-gateway"]
       }
     }
   }

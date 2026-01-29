@@ -48,7 +48,7 @@ pnpm build:fast           # OSS fast release build
 
 | Edition        | Development                                               | Production                                            |
 | -------------- | --------------------------------------------------------- | ----------------------------------------------------- |
-| YIZ Enterprise | `%APPDATA%\io.github.yiztds.yiz-clash-verge-rev.dev`      | `%APPDATA%\io.github.yiztds.yiz-clash-verge-rev`      |
+| YIZ Enterprise | `%APPDATA%\io.github.yiztds.yiz-gateway.dev`              | `%APPDATA%\io.github.yiztds.yiz-gateway`              |
 | OSS            | `%APPDATA%\io.github.clash-verge-rev.clash-verge-rev.dev` | `%APPDATA%\io.github.clash-verge-rev.clash-verge-rev` |
 
 ## Development Quick Start

@@ -20,13 +20,13 @@ notifications:
     body: 訂閱已啟用。
   appQuit:
     title: 即將退出
-    body: Clash Verge 即將退出。
+    body: YIZ Gateway 即將退出。
   appHidden:
     title: 應用已隱藏
-    body: Clash Verge 正在背景執行。
+    body: YIZ Gateway 正在背景執行。
 service:
-  adminInstallPrompt: 安裝 Clash Verge 服務需要管理員權限
-  adminUninstallPrompt: 卸载 Clash Verge 服務需要管理員權限
+  adminInstallPrompt: 安裝 YIZ Gateway 服務需要管理員權限
+  adminUninstallPrompt: 卸载 YIZ Gateway 服務需要管理員權限
 tray:
   dashboard: 儀表板
   ruleMode: 規則模式
@@ -51,7 +51,7 @@ tray:
   coreLog: 核心日誌
   restartClash: 重新啟動 Clash 核心
   restartApp: 重新啟動應用程式
-  vergeVersion: Verge 版本
+  vergeVersion: YIZ Gateway 版本
   more: 更多
   exit: 離開
   tooltip:

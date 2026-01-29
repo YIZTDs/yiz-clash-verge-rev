@@ -1,4 +1,4 @@
-name: YIZ Clash Sub
+name: YIZ Gateway Sub
 url: http://10.0.0.16:56080/v1/sub/clash
 option:
   update_interval: 1440

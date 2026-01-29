@@ -26,7 +26,7 @@ tracing-full = []
 yiz-edition = []
 
 [package.metadata.bundle]
-identifier = "io.github.yiztds.yiz-clash-verge-rev"
+identifier = "io.github.yiztds.yiz-gateway"
 
 [build-dependencies]
 tauri-build = { version = "2.5.3", features = [] }
